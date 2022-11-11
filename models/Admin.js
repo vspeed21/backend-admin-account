@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import generateToken from '../helpers/generateToken.js';
 
 const adminSchema = mongoose.Schema({
   name:{
@@ -18,7 +19,8 @@ const adminSchema = mongoose.Schema({
     trim: true,
   },
   token:{
-    default: null,
+    type: String,
+    default: generateToken(),
   },
   confirmed:{
     type: Boolean,
