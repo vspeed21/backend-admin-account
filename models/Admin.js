@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt';
+
 import generateToken from '../helpers/generateToken.js';
 
 const adminSchema = mongoose.Schema({
@@ -27,6 +29,19 @@ const adminSchema = mongoose.Schema({
     default: false,
   }
 });
+
+adminSchema.pre('save', async function(next){
+  if(!this.isModified('password')) {
+    next();
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+adminSchema.methods.checkPassword = async function(password){
+  return await bcrypt.compare(password, this.password);
+}
 
 const Admin = mongoose.model('Admin', adminSchema);
 
