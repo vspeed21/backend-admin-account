@@ -61,3 +61,16 @@ export const forgotPasswordSendEmail = async (req, res) => {
     console.log(error);
   }
 }
+
+export const checkToken = async (req, res) => {
+  const { token } = req.params;
+  
+  const admin = await Admin.findOne({token});
+
+  if(admin) {
+    res.send({msg: "Ingresa tu nueva contraseña"});
+  }else{
+    const error = new Error("Hubo un error con el enlace");
+    return res.json({msg: error.message});
+  }
+}
