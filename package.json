@@ -1,0 +1,27 @@
+{
+  "name": "admin-for-streaming-accounts",
+  "version": "1.0.0",
+  "description": "Api for admin streaming accounts",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vspeed21/admin-streaming-api.git"
+  },
+  "keywords": [
+    "ADMIN",
+    "STREAMING",
+    "ACCOUNT",
+    "NETFLIX",
+    "API",
+    "NODE"
+  ],
+  "author": "Victor Torres",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vspeed21/admin-streaming-api/issues"
+  },
+  "homepage": "https://github.com/vspeed21/admin-streaming-api#readme"
+}
