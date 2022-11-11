@@ -74,3 +74,25 @@ export const checkToken = async (req, res) => {
     return res.json({msg: error.message});
   }
 }
+
+export const savePassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  
+  const admin = await Admin.findOne({token});
+
+  if(!admin) {
+    const error = new Error("Hubo un error con el enlace");
+    return res.json({msg: error.message});
+  }
+
+  try {
+    admin.token = null;
+    admin.password = password;
+    await admin.save();
+
+    res.json({msg: 'Contraseña modificada correctamente'})
+  } catch (error) {
+    console.log(error);
+  }
+}
