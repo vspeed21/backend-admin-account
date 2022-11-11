@@ -1,5 +1,6 @@
 {
   "name": "admin-for-streaming-accounts",
+  "type":"module",
   "version": "1.0.0",
   "description": "Api for admin streaming accounts",
   "main": "index.js",
