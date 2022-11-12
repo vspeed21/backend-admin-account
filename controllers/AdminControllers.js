@@ -125,3 +125,10 @@ export const login = async (req, res) => {
     return res.json({msg: error.message});
   }
 }
+
+//Priva requiests
+export const getPerfil = (req, res) => {
+  const { admin } = req;
+
+  res.json(admin);
+}
