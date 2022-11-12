@@ -1,3 +1,4 @@
+import generateJWT from "../helpers/generarJWT.js";
 import generateToken from "../helpers/generateToken.js";
 import Admin from "../models/Admin.js"
 
@@ -94,5 +95,33 @@ export const savePassword = async (req, res) => {
     res.json({msg: 'Contraseña modificada correctamente'})
   } catch (error) {
     console.log(error);
+  }
+}
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  const admin = await Admin.findOne({email});
+
+  if(!admin) {
+    const error = new Error("Cuenta no registrada aún");
+    return res.json({msg: error.message});
+  }
+
+  if(!admin.confirmed) {
+    const error = new Error("Tu cuenta aún no ha sido confirmada");
+    return res.json({msg: error.message});
+  }
+
+  if(await admin.checkPassword(password)) {
+    res.json({
+      _id: admin._id,
+      name: admin.name,
+      email: admin.email,
+      token: generateJWT(admin._id),
+    });
+  }else{
+    const error = new Error("Contraseña incorrecta");
+    return res.json({msg: error.message});
   }
 }
