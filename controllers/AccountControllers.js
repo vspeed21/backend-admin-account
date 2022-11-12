@@ -11,3 +11,8 @@ export const addAccount = async (req, res) => {
     console.log(error);
   }
 }
+
+export const getAccounts = async (req, res) => {
+  const accounts = await Account.find().where('admin').equals(req.admin);
+  res.json(accounts);
+}
