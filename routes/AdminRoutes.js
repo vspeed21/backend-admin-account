@@ -7,15 +7,21 @@ import {
   checkToken,
   savePassword,
   login,
+
+  getPerfil
 }from '../controllers/AdminControllers.js'
+import checkAuth from '../middlewares/checkAuth.js';
 
 const router = express.Router();
 
-//Public area
+//Public endpoints/request
 router.post('/', signUp);
 router.get('/confirm/:token', confirmAcc);
 router.post('/login', login);
 router.post('/forgot-password', forgotPasswordSendEmail);
 router.route('/forgot-password/:token').get(checkToken).post(savePassword);
+
+//Private endpoints/request
+router.get('/perfil', checkAuth, getPerfil);
 
 export default router;
