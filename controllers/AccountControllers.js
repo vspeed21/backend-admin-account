@@ -47,3 +47,25 @@ export const updateAcc = async (req, res) => {
   }
   
 }
+
+export const destroyAcc = async (req, res) => {
+  const { id } = req.params;
+
+  const account = await Account.findById(id);
+
+  if(!account) {
+    return res.status(404).json({msg: "NOT FOUND"});
+  }
+
+  if(account.admin._id.toString() !== req.admin._id.toString()) {
+    return res.json({msg: "Accion no valida"})
+  }
+
+  try {
+    await account.deleteOne();
+    res.json({msg: "Cuenta eliminada correctamente"});
+
+  } catch (error) {
+    console.log(error);
+  }
+}
