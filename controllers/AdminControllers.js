@@ -1,6 +1,8 @@
 import generateJWT from "../helpers/generarJWT.js";
 import generateToken from "../helpers/generateToken.js";
-import Admin from "../models/Admin.js"
+import Admin from "../models/Admin.js";
+import sendEmailSignUp from "../helpers/sendEmailSignUp.js";
+import sendEmailForgotPassword from "../helpers/sendEmailForgotPasword.js";
 
 export const signUp = async (req, res) => {
   const { email } = req.body;
@@ -8,13 +10,19 @@ export const signUp = async (req, res) => {
   const adminExists = await Admin.findOne({email});
   
   if(adminExists) {
-    const error = new Error("Cuenta ya registrada");
-    return res.json({msg: error.message});
+    const error = new Error("La cuenta ya fue registrada");
+    return res.status(403).json({msg: error.message});
   }
 
   try {
     const admin = new Admin(req.body);
-    await admin.save();
+    const adminSave = await admin.save();
+
+    sendEmailSignUp({
+      nombre: adminSave.name,
+      email,
+      token: adminSave.token,
+    });
 
     res.json({msg: 'Se ha enviado un correo para tu confirmar tu cuenta'});
 
@@ -30,7 +38,7 @@ export const confirmAcc = async (req, res) => {
 
   if(!admin) {
     const error = new Error("Hubo un error con el enlace");
-    return res.json({msg: error.message});
+    return res.status(404).json({msg: error.message});
   }
 
   try {
@@ -50,12 +58,18 @@ export const forgotPasswordSendEmail = async (req, res) => {
 
   if(!admin) {
     const error = new Error("Cuenta no registrada aún");
-    return res.json({msg: error.message});
+    return res.status(404).json({msg: error.message});
   }
 
   try {
     admin.token = generateToken();
-    await admin.save();
+    const adminSave = await admin.save();
+
+    sendEmailForgotPassword({
+      nombre: admin.name,
+      email,
+      token: adminSave.token,
+    })
 
     res.json({msg: "Se ha enviado un correo con las instrucciones"});
   } catch (error) {
@@ -72,7 +86,7 @@ export const checkToken = async (req, res) => {
     res.send({msg: "Ingresa tu nueva contraseña"});
   }else{
     const error = new Error("Hubo un error con el enlace");
-    return res.json({msg: error.message});
+    return res.status(404).json({msg: error.message});
   }
 }
 
@@ -84,7 +98,7 @@ export const savePassword = async (req, res) => {
 
   if(!admin) {
     const error = new Error("Hubo un error con el enlace");
-    return res.json({msg: error.message});
+    return res.status(404).json({msg: error.message});
   }
 
   try {
@@ -105,7 +119,7 @@ export const login = async (req, res) => {
 
   if(!admin) {
     const error = new Error("Cuenta no registrada aún");
-    return res.json({msg: error.message});
+    return res.status(404).json({msg: error.message});
   }
 
   if(!admin.confirmed) {
@@ -122,7 +136,7 @@ export const login = async (req, res) => {
     });
   }else{
     const error = new Error("Contraseña incorrecta");
-    return res.json({msg: error.message});
+    return res.status(404).json({msg: error.message});
   }
 }
 
