@@ -5,8 +5,8 @@ export const addAccount = async (req, res) => {
   account.admin = req.admin._id;
 
   try {
-    await account.save();
-    res.json({msg: 'Cuenta agregada correctamente'});
+    const accountSave = await account.save();
+    res.json(accountSave);
   } catch (error) {
     console.log(error);
   }
@@ -19,7 +19,7 @@ export const getAccounts = async (req, res) => {
 
 export const updateAcc = async (req, res) => {
   const { id } = req.params;
-  const { name, screen, pin, card, deadline} = req.body;
+  const { name, screen, pin, deadline} = req.body;
 
   const account = await Account.findById(id);
 
@@ -35,12 +35,11 @@ export const updateAcc = async (req, res) => {
     account.name = name || account.name;
     account.screen = screen || account.screen;
     account.pin = pin || account.pin;
-    account.card = card || account.card;
     account.deadline = deadline || account.deadline;
 
-    await account.save();
+    const accountSave = await account.save();
 
-    res.json({msg: "Modificado correctamente"});
+    res.json(accountSave);
 
   } catch (error) {
     console.log(error);

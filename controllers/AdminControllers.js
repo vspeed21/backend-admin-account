@@ -146,3 +146,24 @@ export const getPerfil = (req, res) => {
 
   res.json(admin);
 }
+
+export const updateProfile = async (req, res) => {
+  const { _id, name } = req.body;
+  
+  const admin = await Admin.findById(_id);
+
+  if(!admin) {
+    const error = new Error('Cuenta no encontrada');
+    return res.status(404).json({msg: error.message});
+  }
+
+  try {
+    admin.name = name || admin.name;
+    await admin.save()
+
+    res.json({msg: 'Datos modificados correctamente'});
+
+  } catch (error) {
+    console.log(error);
+  }
+}
