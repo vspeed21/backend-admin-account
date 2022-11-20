@@ -8,7 +8,8 @@ import {
   savePassword,
   login,
 
-  getPerfil
+  getPerfil,
+  updateProfile,
 }from '../controllers/AdminControllers.js'
 import checkAuth from '../middlewares/checkAuth.js';
 
@@ -23,5 +24,6 @@ router.route('/forgot-password/:token').get(checkToken).post(savePassword);
 
 //Private endpoints/request
 router.get('/perfil', checkAuth, getPerfil);
+router.put('/perfil', checkAuth, updateProfile);
 
 export default router;
