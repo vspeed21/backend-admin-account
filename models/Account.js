@@ -16,14 +16,10 @@ const cuentaSchema = mongoose.Schema({
     required: true,
     trim:true,
   },
-  card:{
+  deadline:{
     type: String,
     required: true,
-    trim: true,
-  },
-  deadline:{
-    type: Date,
-    default: Date.now(),
+    default: null,
   },
   admin:{
     type: mongoose.Schema.Types.ObjectId,
