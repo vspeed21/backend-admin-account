@@ -167,3 +167,30 @@ export const updateProfile = async (req, res) => {
     console.log(error);
   }
 }
+
+export const changePassword = async (req, res) => {
+  const { pwd_actual, pwd_nuevo }= req.body;
+  const { _id } = req.admin;
+
+  const admin = await Admin.findById(_id);
+
+  if(!admin) {
+    const error = new Error('Cuenta no encontrada');
+    return res.status(404).json({msg: error.message});
+  };
+
+  if(!await admin.checkPassword(pwd_actual)) {
+    const error = new Error("La contraseña actual es incorrecta");
+    return res.status(404).json({msg: error.message});
+  }
+
+  try {
+    admin.password = pwd_nuevo;
+    await admin.save();
+
+    res.json({msg: 'contraseña modificada correctamente'});
+  } catch (error) {
+    console.log(error);
+  }
+  
+}

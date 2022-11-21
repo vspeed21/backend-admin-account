@@ -10,6 +10,7 @@ import {
 
   getPerfil,
   updateProfile,
+  changePassword
 }from '../controllers/AdminControllers.js'
 import checkAuth from '../middlewares/checkAuth.js';
 
@@ -25,5 +26,6 @@ router.route('/forgot-password/:token').get(checkToken).post(savePassword);
 //Private endpoints/request
 router.get('/perfil', checkAuth, getPerfil);
 router.put('/perfil', checkAuth, updateProfile);
+router.put('/change-password', checkAuth, changePassword);
 
 export default router;
